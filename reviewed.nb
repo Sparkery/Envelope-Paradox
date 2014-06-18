@@ -1,0 +1,32 @@
+Manipulate[
+ Module[{trials, stayMoney, switchMoney, stayList, switchList, 
+   envelope1, envelope2},
+  SeedRandom[seed];
+  trials = TrialCount;
+  stayMoney = 0.;
+  switchMoney = 0.;
+  stayList = Table[0, {trials}];
+  switchList = Table[0, {trials}];
+  For[i = 1, i <= trials, ++i,
+   Quiet[(
+      envelope1 = RandomInteger[{5, 20}];
+      envelope2  = 0;
+      If[ Random[] <= 0.5, envelope2 = envelope1*.5, 
+       envelope2 = envelope1*2];
+      stayMoney += envelope1;
+      switchMoney += envelope2;
+      stayList[[i]] = stayMoney;
+      switchList[[i]] = switchMoney;
+      )];
+   ];
+  Column[{
+    Text@Row[{Style["switch to other envelope", Red], Spacer[20], 
+       Style["keep original envelope", Blue]}],
+    ListPlot[{switchList, stayList}, AxesOrigin -> {0, 0}, 
+     PlotStyle -> {Red, Blue}, ImageSize -> 1.5 {400, 250}]}, 
+   Alignment -> Center]],
+  {{TrialCount, 100, "number of trials"}, 1, 200, 1, 
+  Appearance -> "Labeled"},
+  {{seed, 1, "random number seed"}, 1, 100, 1, 
+  Appearance -> "Labeled"},
+ TrackedSymbols :> {TrialCount, seed}]
