@@ -1,0 +1,23 @@
+stayMoney = 0.;
+switchMoney = 0.;
+trials = 100;
+stayList = Table[0, {trials}];
+switchList = Table[0, {trials}];
+
+Quiet[Manipulate[(SeedRandom[seed]; trials = TrialCount; 
+   stayMoney = 0.; switchMoney = 0.;
+   stayList = Table[0, {trials}];
+   switchList = Table[0, {trials}]; For[i = 1, i <= trials, ++i,
+    Quiet[(envelope1 = RandomInteger[{5, 20}];
+       envelope2  = 0;
+       If[ Random[] < 0.5, envelope2 = envelope1*.5, 
+        envelope2 = envelope1*2];
+       stayMoney += envelope1;
+       switchMoney += envelope2;
+       stayList[[i]] = stayMoney;
+       switchList[[i]] = switchMoney;
+       )];
+    
+    ]; Show[ListPlot[switchList, PlotStyle -> Red], 
+    ListPlot[stayList]]), {{TrialCount, 100, "Number of Boxes"}, 1, 
+   200, 1}, {{seed, 1, "Random Number Seed"}, 1, 100, 1}]]
